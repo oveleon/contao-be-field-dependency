@@ -1,6 +1,6 @@
 # Contao Backend Field Dependency
 
-In addition to pallets and sub-pallets, this extension adds a new field property (`dependsOn`) for DCA's where conditions can be defined to display the field.
+In addition to palettes and sub-palettes, this extension adds a new field property (`dependsOn`) for DCA's where conditions can be defined to display the field.
 
 #### Condition based on another field and its value:
 ```php
@@ -23,12 +23,6 @@ In addition to pallets and sub-pallets, this extension adds a new field property
 
 #### Condition based on another field and a custom callback:
 ```php
-'field1'  => [
-    'exclude'    => true,
-    'inputType'  => 'checkbox',
-    'eval'       => array('tl_class' => 'w50 m12'),
-    'sql'        => "char(1) NOT NULL default '0'",
-],
 'field2'  => [
     'exclude'    => true,
     'inputType'  => 'text',

@@ -34,9 +34,14 @@ class LoadDataContainerListener
 
                 if(\is_array($dependencies))
                 {
-                    foreach ($dependencies as $conditionFieldName => $condition)
+                    foreach (array_flip($dependencies) as $conditionFieldName => $condition)
                     {
-                        $dependentFields[] = $conditionFieldName;
+                        if(is_string($conditionFieldName))
+                        {
+                            $dependentFields[] = $conditionFieldName;
+                        }
+
+                        // Todo: Allow multiple conditions
 
                         // Check condition
                         if(is_callable($condition))
@@ -50,7 +55,9 @@ class LoadDataContainerListener
 
                         if($blnDisable)
                         {
+                            // ToDo: move one up?!
                             unset($GLOBALS['TL_DCA'][$dc->table]['fields'][$fieldName]);
+                            continue 2;
                         }
                     }
                 }
