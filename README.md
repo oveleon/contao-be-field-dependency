@@ -7,13 +7,13 @@ In addition to palettes and sub-palettes, this extension adds a new field proper
 'field1'  => [
     'exclude'    => true,
     'inputType'  => 'checkbox',
-    'eval'       => array('tl_class' => 'w50 m12'),
+    'eval'       => ['tl_class' => 'w50 m12'],
     'sql'        => "char(1) NOT NULL default '0'",
 ],
 'field2'  => [
     'exclude'    => true,
     'inputType'  => 'text',
-    'eval'       => array('maxlength'=>64, 'tl_class'=>'w50'),
+    'eval'       => ['maxlength'=>64, 'tl_class'=>'w50'],
     'sql'        => "varchar(64) NOT NULL default ''",
     'dependsOn'  => [
         'field1' => 1 // Displays this field only if the checkbox (field1) has been selected.
@@ -26,7 +26,7 @@ In addition to palettes and sub-palettes, this extension adds a new field proper
 'field2'  => [
     'exclude'    => true,
     'inputType'  => 'text',
-    'eval'       => array('maxlength'=>64, 'tl_class'=>'w50'),
+    'eval'       => ['maxlength'=>64, 'tl_class'=>'w50'],
     'sql'        => "varchar(64) NOT NULL default ''",
     'dependsOn'  => [
         'field1' => static function($fieldName, $objModel) {
@@ -43,13 +43,39 @@ For example:
 'field2'  => [
     'exclude'    => true,
     'inputType'  => 'text',
-    'eval'       => array('maxlength'=>64, 'tl_class'=>'w50'),
+    'eval'       => ['maxlength'=>64, 'tl_class'=>'w50'],
     'sql'        => "varchar(64) NOT NULL default ''",
     'dependsOn'  => [
         static function($fieldName, $objModel) {
             // $fieldName = 0
             // ... 
         }
+    ]
+],
+```
+
+#### Multiple conditions:
+```php
+'field1'  => [
+    'exclude'    => true,
+    'inputType'  => 'checkbox',
+    'eval'       => ['tl_class' => 'w50 m12'],
+    'sql'        => "char(1) NOT NULL default '0'",
+],
+'field2'  => [
+    'exclude'    => true,
+    'inputType'  => 'checkbox',
+    'eval'       => ['tl_class' => 'w50 m12'],
+    'sql'        => "char(1) NOT NULL default '0'",
+],
+'field3'  => [
+    'exclude'    => true,
+    'inputType'  => 'text',
+    'eval'       => ['maxlength'=>64, 'tl_class'=>'w50'],
+    'sql'        => "varchar(64) NOT NULL default ''",
+    'dependsOn'  => [
+        'field2' => 1, 
+        'field3' => 1 // Both fields must be checked to display this field
     ]
 ],
 ```
@@ -84,4 +110,4 @@ contao_be_field_dependency:
 Parameter | Default | Description
 ---------- | ----------- | -----------
 `autoSubmit` | true | Referenced fields in `dependsOn` automatically get the "submitOnChange" evaluation set. Should this parameter be set to `false`, the evaluation must be added manually.
-`tables` | (see above) | List of tables where `dependsOn` may be taken into account. When adding your own tables, the defaults will be overwritten, please add all tables again.
+`tables` | (see above) | List of tables where `dependsOn` may be taken into account. If you add your own tables, the default settings will be overwritten and you will have to set them yourself.

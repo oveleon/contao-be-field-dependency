@@ -34,31 +34,29 @@ class LoadDataContainerListener
 
                 if(\is_array($dependencies))
                 {
-                    foreach (array_flip($dependencies) as $conditionFieldName => $condition)
+                    $disable = [];
+
+                    foreach ($dependencies as $conditionFieldName => $condition)
                     {
                         if(is_string($conditionFieldName))
                         {
                             $dependentFields[] = $conditionFieldName;
                         }
 
-                        // Todo: Allow multiple conditions
-
                         // Check condition
                         if(is_callable($condition))
                         {
-                            $blnDisable = !$condition($conditionFieldName, $objModel);
+                            $disable[] = !$condition($conditionFieldName, $objModel);
                         }
                         else
                         {
-                            $blnDisable = $objModel->{$conditionFieldName} != $condition;
+                            $disable[] = $objModel->{$conditionFieldName} == $condition;
                         }
+                    }
 
-                        if($blnDisable)
-                        {
-                            // ToDo: move one up?!
-                            unset($GLOBALS['TL_DCA'][$dc->table]['fields'][$fieldName]);
-                            continue 2;
-                        }
+                    if(in_array(false, $disable))
+                    {
+                        unset($GLOBALS['TL_DCA'][$dc->table]['fields'][$fieldName]);
                     }
                 }
             }
