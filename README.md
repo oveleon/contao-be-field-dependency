@@ -31,7 +31,9 @@ In addition to palettes and sub-palettes, this extension adds a new field proper
     'dependsOn'  => [
         'field1' => static function($fieldName, $objModel) {
             // $fieldName = field1
-            return $objModel->{$fieldName} == 1; // true = show / false = hide 
+            // "field1" is automatically supplemented with the field evaluation "submitOnChange = true" (autoSubmit = true).
+            // Return true = show / false = hide
+            return $objModel->{$fieldName} == 1;  
         }
     ]
 ],
@@ -46,9 +48,13 @@ For example:
     'eval'       => ['maxlength'=>64, 'tl_class'=>'w50'],
     'sql'        => "varchar(64) NOT NULL default ''",
     'dependsOn'  => [
-        static function($fieldName, $objModel) {
+        static function($fieldName, $objModel, &$arrEvaluationFields) {
             // $fieldName = 0
-            // ... 
+            // 'field1' must be extended independently with the field evaluation 'submitOnChange = true' or added via the third parameter ($arrFields) (autoSubmit = true).
+            $arrEvaluationFields[] = 'field1';
+            
+            // Return true = show / false = hide       
+            return $objModel->field1 == 1; 
         }
     ]
 ],
