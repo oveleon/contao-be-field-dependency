@@ -32,6 +32,7 @@ In addition to palettes and sub-palettes, this extension adds a new field proper
         'field1' => static function($fieldName, $objModel) {
             // $fieldName = field1
             // "field1" is automatically supplemented with the field evaluation "submitOnChange = true" (autoSubmit = true).
+            
             // Return true = show / false = hide
             return $objModel->{$fieldName} == 1;  
         }
