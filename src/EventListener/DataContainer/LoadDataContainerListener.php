@@ -46,7 +46,7 @@ class LoadDataContainerListener
                         // Check condition
                         if(is_callable($condition))
                         {
-                            $disable[] = $condition($conditionFieldName, $objModel);
+                            $disable[] = $condition($conditionFieldName, $objModel, $dependentFields);
                         }
                         else
                         {
