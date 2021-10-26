@@ -14,7 +14,7 @@ class LoadDataContainerListener
 {
     public function __invoke(string $table): void
     {
-        if('edit' !== Input::get('act') || !in_array($table, Controller::getContainer()->getParameter('contao_be_field_dependency.tables')))
+        if(!in_array($table, Controller::getContainer()->getParameter('contao_be_field_dependency.tables')))
         {
             return;
         }
@@ -75,7 +75,7 @@ class LoadDataContainerListener
     {
         $dc = new \stdClass();
         $dc->table = $table;
-        $dc->id = Input::get('id');
+        $dc->id = Input::get('id') ?? Input::post('id');
 
         return $dc;
     }
