@@ -35,22 +35,33 @@ class LoadDataContainerListener
                 if(\is_array($dependencies))
                 {
                     $disable = [];
+                    $blnSkip = false;
 
                     foreach ($dependencies as $conditionFieldName => $condition)
                     {
                         if(is_string($conditionFieldName))
                         {
                             $dependentFields[] = $conditionFieldName;
+
+                            // If the condition field has already been removed, the current field to be checked must not be output.
+                            if(!isset($GLOBALS['TL_DCA'][$dc->table]['fields'][$conditionFieldName]))
+                            {
+                                $disable[] = false;
+                                $blnSkip   = true;
+                            }
                         }
 
                         // Check condition
-                        if(is_callable($condition))
+                        if(!$blnSkip)
                         {
-                            $disable[] = $condition($conditionFieldName, $objModel, $dependentFields);
-                        }
-                        else
-                        {
-                            $disable[] = $objModel->{$conditionFieldName} == $condition;
+                            if(is_callable($condition))
+                            {
+                                $disable[] = $condition($conditionFieldName, $objModel, $dependentFields);
+                            }
+                            else
+                            {
+                                $disable[] = $objModel->{$conditionFieldName} == $condition;
+                            }
                         }
                     }
 
