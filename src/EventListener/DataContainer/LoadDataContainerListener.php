@@ -14,7 +14,7 @@ class LoadDataContainerListener
 {
     public function __invoke(string $table): void
     {
-        if(!in_array($table, Controller::getContainer()->getParameter('contao_be_field_dependency.tables')))
+        if(!in_array($table, $this->getValidTables()))
         {
             return;
         }
@@ -80,6 +80,14 @@ class LoadDataContainerListener
                 }
             }
         }
+    }
+
+    private function getValidTables(): array
+    {
+        return array_merge(
+            $GLOBALS['BE_FIELD_DEPENDENCY_TABLES'] ?? [],
+            Controller::getContainer()->getParameter('contao_be_field_dependency.tables') ?? []
+        );
     }
 
     private function simulateDataContainer($table): \stdClass
