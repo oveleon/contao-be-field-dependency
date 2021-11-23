@@ -6,22 +6,34 @@ namespace Oveleon\ContaoBeFieldDependency\EventListener\DataContainer;
 use Contao\Controller;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Input;
+use Doctrine\DBAL\Connection;
 
 /**
  * @Hook("loadDataContainer")
  */
 class LoadDataContainerListener
 {
+    private Connection $connection;
+
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
     public function __invoke(string $table): void
     {
-        if(!in_array($table, $this->getValidTables()))
+        if(!$this->connection->getSchemaManager()->tablesExist($table) || !in_array($table, $this->getValidTables()))
         {
             return;
         }
 
         $dc = $this->simulateDataContainer($table);
 
-        $strClass = $GLOBALS['TL_MODELS'][$dc->table];
+        if(!($strClass = $GLOBALS['TL_MODELS'][$dc->table]))
+        {
+            return;
+        }
+
         $objModel = $strClass::findById($dc->id);
 
         if($dcaFields = $GLOBALS['TL_DCA'][$dc->table]['fields'])
