@@ -29,7 +29,7 @@ class LoadDataContainerListener
 
         $dc = $this->simulateDataContainer($table);
 
-        if(!($strClass = $GLOBALS['TL_MODELS'][$dc->table]))
+        if(!($strClass = ($GLOBALS['TL_MODELS'][$dc->table] ?? null)))
         {
             return;
         }
